@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">LanguagePronunciationStudy</string>
+    <string name="word_label_default">word</string>
+    <string name="score_label_default">score</string>
+    <string name="difficulty_label_default">difficulty</string>
+    <string name="play_button_label">play</string>
+    <string name="record_button_label">record</string>
+    <string name="translation_default">word translated</string>
 </resources>

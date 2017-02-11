@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Amigo de Pronunciation</string>
+    <string name="word_label_default">palabras</string>
+    <string name="score_label_default">puntaje</string>
+    <string name="difficulty_label_default">dificultad</string>
+    <string name="play_button_label">toca</string>
+    <string name="record_button_label">grabar</string>
+
+
+
+</resources>
