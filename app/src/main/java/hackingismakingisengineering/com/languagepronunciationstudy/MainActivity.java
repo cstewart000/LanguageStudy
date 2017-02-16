@@ -2,6 +2,7 @@ package hackingismakingisengineering.com.languagepronunciationstudy;
 
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v7.app.AppCompatActivity;
@@ -15,18 +16,32 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
+import com.j256.ormlite.stmt.Where;
+import com.j256.ormlite.table.TableUtils;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Random;
 
 import hackingismakingisengineering.com.languagepronunciationstudy.api.GoogleTranslateApi;
 import hackingismakingisengineering.com.languagepronunciationstudy.database.DictionaryReader;
+import hackingismakingisengineering.com.languagepronunciationstudy.database.WordsDatabaseHelper;
+import hackingismakingisengineering.com.languagepronunciationstudy.model.Word;
 import hackingismakingisengineering.com.languagepronunciationstudy.settings.ApplicationSettings;
 import hackingismakingisengineering.com.languagepronunciationstudy.settings.SupportedLanguages;
 import hackingismakingisengineering.com.languagepronunciationstudy.ttsandstt.Speech;
@@ -57,6 +72,17 @@ public class MainActivity extends AppCompatActivity {
     private boolean initialised =false;
 
 
+    WordsDatabaseHelper wordsDatabaseHelper;
+
+    Dao<Word, Long> wordDao;
+
+    Where<Word, Long> results;
+
+
+
+
+    Iterator iterator;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,18 +100,29 @@ public class MainActivity extends AppCompatActivity {
 
         //checkTTS();
 
+
+
         ApplicationSettings.initaliseApplicationSettings(getApplicationContext());
-        speech = new Speech(getApplicationContext());
+        //speech = new Speech(getApplicationContext());
 
 
         if(!initialised){
-            DictionaryReader.initialise(getApplicationContext());
+            //DictionaryReader dr = new DictionaryReader();
+            //dr.initialise(getApplicationContext());
         }
 
+        //DictionaryTask task = new DictionaryTask();
+
+        //runDictionaryReader();
+        //task.doInBackground("blank");
 
 
-
-        okHttpClient = new OkHttpClient();
+        try {
+            testORMdatabaseIpaMostFrequent();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        //okHttpClient = new OkHttpClient();
 
         speakText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,8 +139,11 @@ public class MainActivity extends AppCompatActivity {
         recordText.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                promptSpeechInput();
 
+                //todo remove junk code
+                //promptSpeechInput();
+
+                printNextWord();
             }
         });
 
@@ -129,7 +169,14 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
+
+        try {
+            testORMdatabase();
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
+
+    }
 
     private void parseCallbackResponse(String jsonData){
         JSONObject jsonObject = null;
@@ -254,12 +301,85 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void testORMdatabase() throws SQLException{
+
+        WordsDatabaseHelper wordsDatabaseHelper = OpenHelperManager.getHelper(this,WordsDatabaseHelper.class);
+
+        Dao<Word, Long> wordDao = wordsDatabaseHelper.getDao();
+
+
+        Random random = new Random();
+
+        int numWords = (int) wordDao.countOf();
+        int randint = random.nextInt(numWords);
+
+        Word word = wordDao.queryForId((long)randint);
+
+
+        String output = word.toString();
+
+        Log.d(TAG, output);
+
+
+
+    }
+
+
+    private void testORMdatabaseIpaMostFrequent() throws SQLException{
+
+         wordsDatabaseHelper = OpenHelperManager.getHelper(this,WordsDatabaseHelper.class);
+
+        wordDao = wordsDatabaseHelper.getDao();
+
+        results = wordDao.queryBuilder().where().isNotNull("wordIPA");
+
+
+
+        iterator = results.iterator();
+        //int numWords = (int) results.size();
+        //int randint = random.nextInt(numWords);
+
+        printNextWord();
+
+
+
+    }
+
+    private void printNextWord() {
+        Word word = (Word) iterator.next();
+
+        //iterator.
+
+        String output = word.toString();
+        //Log.d(TAG, numWords+"");
+        Log.d(TAG, output);
+    }
 
 
     private void checkTTS(){
         Intent check = new Intent();
         check.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(check, TTS_CHECK_CODE);
+    }
+
+    public class DictionaryTask extends AsyncTask{
+
+
+
+        @Override
+        protected Object doInBackground(Object[] objects) {
+            //DictionaryReader dr = new DictionaryReader();
+            //dr.initialise(getApplicationContext());
+            return null;
+        }
+
+
+    }
+
+    public void runDictionaryReader() {
+
+        DictionaryReader dr = new DictionaryReader();
+        dr.initialise(getApplicationContext());
     }
 
 }

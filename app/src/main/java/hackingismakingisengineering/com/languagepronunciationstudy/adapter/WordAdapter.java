@@ -92,12 +92,13 @@ public class WordAdapter extends BaseAdapter {
         String displayAttr ="";
         String b = "-/";
 
+        /*
         displayAttr += (word.getPron_bool()) ? "p/" : b;
         displayAttr += (word.getVocab_bool()) ? "v/" : b;
         displayAttr += (word.getGender_bool()) ? "g/" : b;
         displayAttr += (word.getDistinc_bool()) ? "d/" : b;
         displayAttr += (word.getConj_bool()) ? "c/": b;
-
+        */
         return  displayAttr;
     }
 

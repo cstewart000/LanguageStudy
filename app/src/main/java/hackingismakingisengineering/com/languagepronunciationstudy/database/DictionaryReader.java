@@ -1,7 +1,11 @@
 package hackingismakingisengineering.com.languagepronunciationstudy.database;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
+
+import com.j256.ormlite.android.apptools.OpenHelperManager;
+import com.j256.ormlite.dao.Dao;
 
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
@@ -9,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.Charset;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -24,15 +29,39 @@ import hackingismakingisengineering.com.languagepronunciationstudy.model.Word;
 public class DictionaryReader {
 
 
+    private static long record = 0;
     private static final String TAG = DictionaryReader.class.getSimpleName();
     public static ArrayList<Word> dictionary= new ArrayList<>();
 
-    private static Context context;
+    private Context context;
+
+    static WordsDatabaseHelper wordsDatabaseHelper;
+
+    static Dao<Word, Long> wordDao;
+
 
     // write your code here
-    public static void initialise(Context con){
+    public void initialise(Context con){
+    //public static void main(String[] args) {
+
         context = con;
-        //readinDictionary(R.raw.french_dictionary_utf_16);
+
+
+
+
+
+        wordsDatabaseHelper = OpenHelperManager.getHelper(context,WordsDatabaseHelper.class);
+
+
+        try {
+            wordDao = wordsDatabaseHelper.getDao();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+        readinDictionary(R.raw.french_dictionary_utf_16);
         readinDictionary(R.raw.fpd);
 
         Collections.sort(dictionary, Word.WordComparator);
@@ -41,11 +70,18 @@ public class DictionaryReader {
 
 
             if(dictionary.get(i).compareTo(dictionary.get(i+1))==0){
-                Word word1 = dictionary.get(i);
-                Word word2 = dictionary.get(i+1);
+                Word word2 = dictionary.remove(i+1);
+                Word word1 = dictionary.remove(i);
+
 
                 try {
-                    Word.mergeObjects(word1,word2);
+                    word1 = Word.mergeObjects(word1,word2);
+                    dictionary.add(i,word1);
+                    //dictionary.add(word1);
+                    //dictionary.remove(word2);
+                    //dictionary.remove(word1);
+                    //dictionary.add(word1);
+
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 } catch (InstantiationException e) {
@@ -59,11 +95,29 @@ public class DictionaryReader {
 
 
 
-        Log.v(TAG, dictionary.get(87690).toString());
+        Log.v(TAG, dictionary.get(123).toString());
+
+
+        loadToDatabase();
+
 
     }
 
-    public static void readinDictionary(int resourceId) {
+    private void loadToDatabase() {
+        try {
+        for(int i=0; i< dictionary.size()-1; i++) {
+
+
+                wordDao.create(dictionary.get(i));
+            Log.v(TAG, "record" + record++ + dictionary.get(i).toString());
+
+         }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void readinDictionary(int resourceId) {
 
         //Read in file,
 
@@ -73,6 +127,7 @@ public class DictionaryReader {
 
         InputStream inputStream;
         inputStream = context.getResources().openRawResource(resourceId);
+        //inputStream = Resources.getSystem().openRawResource(resourceId);
 
         BufferedReader br = new BufferedReader(new InputStreamReader(inputStream, Charset.forName("UTF-16")));
 
@@ -93,6 +148,7 @@ public class DictionaryReader {
 
             while (line!= null) {
 
+
                 switch (resourceId) {
                     case R.raw.french_dictionary_utf_16:
                         parseLineCompactus(line);
@@ -101,6 +157,8 @@ public class DictionaryReader {
                         parseLinePronunciation(line);
                         break;
                 }
+
+                line = br.readLine();
             }
             //String everything = sb.toString();
         } catch (FileNotFoundException e) {
@@ -123,10 +181,12 @@ public class DictionaryReader {
             String[] parts = line.split("\t", 5);
             Word word = new Word();
             word.setWordText(parts[1]);
-            word.setAttributes(parts[3]);
+            //word.setAttributes(parts[3]);
             word.setFrequency(Float.parseFloat(parts[4]));
 
             dictionary.add(word);
+
+            Log.v(TAG, "record" + record++ + word.toString());
         }
 
     }
@@ -145,6 +205,8 @@ public class DictionaryReader {
             word.setWordIPA(parts[1]);
 
             dictionary.add(word);
+            Log.v(TAG, "record" + record++ +word.toString());
+
         }
 
     }

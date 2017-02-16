@@ -1,147 +1,72 @@
 package hackingismakingisengineering.com.languagepronunciationstudy.model;
 
+import com.j256.ormlite.field.DatabaseField;
+import com.j256.ormlite.table.DatabaseTable;
+
 import java.lang.reflect.Field;
 import java.util.Comparator;
+
 
 /**
  * Created by helloworld on 5/2/17.
  */
 
+@DatabaseTable(tableName = "dictionary")
 public class Word implements Comparable<Word>{
-    
-    private boolean pron_bool;
-    private boolean vocab_bool;
-    private boolean gender_bool;
-    private boolean distinc_bool;
+
+    @DatabaseField(generatedId = true)
+    private int id;
+
+    @DatabaseField
     private String wordText;
+
+    @DatabaseField
     private String wordIPA;
+
+    @DatabaseField
     private String wordTranslation;
+
+    @DatabaseField
     private double aveScore;
+
+    @DatabaseField
     private int tries;
-    private boolean conj_bool;
+
+    @DatabaseField
     private float frequency;
-    private String attributes;
 
-    public String getAttributes() {
-        return attributes;
-    }
 
-    public float getFrequency() {
-        return frequency;
-    }
-
-    public boolean isConj_bool() {
-        return conj_bool;
-    }
-
-    public boolean isDistinc_bool() {
-        return distinc_bool;
-    }
-
-    public boolean isGender_bool() {
-        return gender_bool;
-    }
-
-    public boolean isPron_bool() {
-        return pron_bool;
-    }
-
-    public boolean isVocab_bool() {
-        return vocab_bool;
-    }
-
-    public String getWordIPA() {
-        return wordIPA;
-    }
-
-    public String getWordText() {
-        return wordText;
-    }
-
-    public String getWordTranslation() {
-        return wordTranslation;
-    }
-
-    public void setAveScore(double aveScore) {
-
+    public Word(double aveScore, float frequency, int id, int tries, String wordIPA, String wordText, String wordTranslation) {
         this.aveScore = aveScore;
-    }
-
-    public void setConj_bool(boolean conj_bool) {
-        this.conj_bool = conj_bool;
-    }
-
-    public void setDistinc_bool(boolean distinc_bool) {
-        this.distinc_bool = distinc_bool;
-    }
-
-    public void setGender_bool(boolean gender_bool) {
-        this.gender_bool = gender_bool;
-    }
-
-    public void setPron_bool(boolean pron_bool) {
-        this.pron_bool = pron_bool;
-    }
-
-    public void setTries(int tries) {
+        this.frequency = frequency;
+        this.id = id;
         this.tries = tries;
-    }
-
-    public void setVocab_bool(boolean vocab_bool) {
-        this.vocab_bool = vocab_bool;
-    }
-
-    public void setWordIPA(String wordIPA) {
         this.wordIPA = wordIPA;
-    }
-
-    public void setWordText(String wordText) {
         this.wordText = wordText;
-    }
-
-    public void setWordTranslation(String wordTranslation) {
         this.wordTranslation = wordTranslation;
     }
 
-    public boolean getPron_bool() {
-        return pron_bool;
+    public Word(String wordText) {
+        this.wordText = wordText;
     }
 
-    public boolean getVocab_bool() {
-        return vocab_bool;
+    public Word() {
     }
 
-    public boolean getGender_bool() {
-        return gender_bool;
+    @Override
+    public String toString() {
+        return "Word{" +
+                "aveScore=" + aveScore +
+                ", id=" + id +
+                ", wordText='" + wordText + '\'' +
+                ", wordIPA='" + wordIPA + '\'' +
+                ", wordTranslation='" + wordTranslation + '\'' +
+                ", tries=" + tries +
+                ", frequency=" + frequency +
+                '}';
     }
 
-    public boolean getDistinc_bool() {
-        return distinc_bool;
-    }
 
-    public boolean getConj_bool() {
-        return conj_bool;
-    }
-
-    public String getWord() {
-        return wordText;
-    }
-
-    public double getAveScore() {
-        return aveScore;
-    }
-
-    public int getTries() {
-        return tries;
-    }
-
-    public void setFrequency(float frequency) {
-        this.frequency = frequency;
-    }
-
-    public void setAttributes(String attributes) {
-        this.attributes = attributes;
-    }
 
     @SuppressWarnings("unchecked")
     public static <T> T mergeObjects(T first, T second) throws IllegalAccessException, InstantiationException {
@@ -158,15 +83,80 @@ public class Word implements Comparable<Word>{
         return (T) returnValue;
     }
 
+
+    public double getAveScore() {
+        return aveScore;
+    }
+
+    public void setAveScore(double aveScore) {
+        this.aveScore = aveScore;
+    }
+
+    public float getFrequency() {
+        return frequency;
+    }
+
+    public void setFrequency(float frequency) {
+        this.frequency = frequency;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getTries() {
+        return tries;
+    }
+
+    public void setTries(int tries) {
+        this.tries = tries;
+    }
+
+    public static Comparator<Word> getWordComparator() {
+        return WordComparator;
+    }
+
+    public static void setWordComparator(Comparator<Word> wordComparator) {
+        WordComparator = wordComparator;
+    }
+
+    public String getWordIPA() {
+        return wordIPA;
+    }
+
+    public void setWordIPA(String wordIPA) {
+        this.wordIPA = wordIPA;
+    }
+
+    public String getWordText() {
+        return wordText;
+    }
+
+    public void setWordText(String wordText) {
+        this.wordText = wordText;
+    }
+
+    public String getWordTranslation() {
+        return wordTranslation;
+    }
+
+    public void setWordTranslation(String wordTranslation) {
+        this.wordTranslation = wordTranslation;
+    }
+
     @Override
     public int compareTo(Word word) {
-        return this.getWord().compareTo(word.getWord());
+        return this.getWordText().compareTo(word.getWordText());
     }
 
     public static Comparator<Word> WordComparator = new Comparator<Word>() {
         @Override
         public int compare(Word word, Word t1) {
-            return word.getWord().compareTo(t1.getWord());
+            return word.getWordText().compareTo(t1.getWordText());
         }
     };
 
