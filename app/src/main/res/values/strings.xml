@@ -6,4 +6,5 @@
     <string name="play_button_label">play</string>
     <string name="record_button_label">record</string>
     <string name="translation_default">word translated</string>
+    <string name="next_button_label">next</string>
 </resources>
