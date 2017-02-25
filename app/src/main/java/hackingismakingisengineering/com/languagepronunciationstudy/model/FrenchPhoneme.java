@@ -62,7 +62,7 @@ public enum FrenchPhoneme {
         return difficulty;
     }
 
-    FrenchPhoneme(String example, String symbol, String ipa, String phoneticSymDescription, String phonologicDescription, int difficulty) {
+    FrenchPhoneme( String symbol,String example, String ipa, String phoneticSymDescription, String phonologicDescription, int difficulty) {
         this.example = example;
         this.symbol = symbol;
         this.ipa = ipa;

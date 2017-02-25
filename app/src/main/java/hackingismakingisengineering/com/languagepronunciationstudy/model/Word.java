@@ -34,6 +34,7 @@ public class Word implements Comparable<Word>{
 
     @DatabaseField
     private float frequency;
+    private int lastScore;
 
 
     public Word(double aveScore, float frequency, int id, int tries, String wordIPA, String wordText, String wordTranslation) {
@@ -161,5 +162,18 @@ public class Word implements Comparable<Word>{
     };
 
 
+    public void incrementTries() {
+        this.tries++;
+    }
 
+    public void score(int score) {
+        
+        this.lastScore = score;
+
+        double newCummulativeScore = aveScore * tries +score;
+        incrementTries();
+
+        aveScore = newCummulativeScore/tries;
+
+    }
 }

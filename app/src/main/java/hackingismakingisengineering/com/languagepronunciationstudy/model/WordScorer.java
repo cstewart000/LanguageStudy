@@ -6,30 +6,28 @@ import java.util.List;
 
 /**
  * Created by helloworld on 17/2/17.
+ *
+ * Helper class for scoring :-)
  */
 
 public class WordScorer {
 
-    List<Character> characterArrayList;
 
-
-    int difficultyScore;
-
-
-    public int getDifficultyScore(String ipaWord) {
+    public static int getDifficultyScore(String ipaWord) {
 
 
         Character[] charObjectArray = toCharacterObjectArray(ipaWord);
         int[] scores = new int[charObjectArray.length];
         int score = 0;
 
-        for (int i = 0; FrenchPhoneme.values().length < i; i++) {
-            for (int j = 0; scores.length < j; j++) {
+        for (int j = 0; j < scores.length; j++) {
+            for (int i = 0; i < FrenchPhoneme.values().length; i++) {
 
-                if (FrenchPhoneme.values()[i].getSymbol().equals(charObjectArray[j])) {
+
+                if (FrenchPhoneme.values()[i].getSymbol().equals(charObjectArray[j].toString())) {
 
                     scores[j] = FrenchPhoneme.values()[i].getDifficulty();
-                    score =+ scores[j];
+                    score += scores[j];
                 }
             }
         }
@@ -37,7 +35,7 @@ public class WordScorer {
 
     }
 
-    public Character[] toCharacterObjectArray(String s) {
+    public static Character[] toCharacterObjectArray(String s) {
 
         if(s == null){
             return null;
@@ -54,14 +52,14 @@ public class WordScorer {
 
     }
 
-    public List<Character> toListCharacterArray(String s){
+    public static List<Character> toListCharacterArray(String s){
 
         List<Character> charcterList = Arrays.asList(toCharacterObjectArray(s));
 
         return charcterList;
     }
 
-    public String characterListToString(List<Character> characterList){
+    public static String characterListToString(List<Character> characterList){
 
         String str ="";
 
@@ -72,7 +70,7 @@ public class WordScorer {
         return str;
     }
 
-    public List<Character>  reportMissingPhonemes(String target, String resultsConcatenated){
+    public static List<Character>  reportMissingPhonemes(String target, String resultsConcatenated){
 
         List<Character> missingPhonemes = new ArrayList<>();
 
@@ -88,7 +86,7 @@ public class WordScorer {
 
     }
 
-    public List<Character>  reportCommonPhonemes(String target, String resultsConcatenated){
+    public static List<Character>  reportCommonPhonemes(String target, String resultsConcatenated){
 
         List<Character> commonPhonemes = new ArrayList<>();
 

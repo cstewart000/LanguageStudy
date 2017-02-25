@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.j256.ormlite.android.apptools.OpenHelperManager;
 import com.j256.ormlite.dao.Dao;
+import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.stmt.Where;
 
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ import hackingismakingisengineering.com.languagepronunciationstudy.api.GoogleTra
 import hackingismakingisengineering.com.languagepronunciationstudy.database.DictionaryReader;
 import hackingismakingisengineering.com.languagepronunciationstudy.database.WordsDatabaseHelper;
 import hackingismakingisengineering.com.languagepronunciationstudy.model.Word;
+import hackingismakingisengineering.com.languagepronunciationstudy.model.WordScorer;
 import hackingismakingisengineering.com.languagepronunciationstudy.settings.ApplicationSettings;
 import hackingismakingisengineering.com.languagepronunciationstudy.settings.SupportedLanguages;
 import hackingismakingisengineering.com.languagepronunciationstudy.ttsandstt.Speech;
@@ -60,6 +62,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView translationTextView;
     private EditText editTextWordEntry;
     private TextView ipaTextView;
+    private TextView heardTextView;
+
+    private TextView scoreTextView;
+    private TextView difficultyTextView;
+    private TextView percentageTextView;
 
 
     private Button speakText;
@@ -93,6 +100,12 @@ public class MainActivity extends AppCompatActivity {
         translationTextView = (TextView)findViewById(R.id.textView_translation);
         editTextWordEntry = (EditText) findViewById(R.id.editText_word);
         ipaTextView = (TextView) findViewById(R.id.textView_ipa);
+        heardTextView = (TextView) findViewById(R.id.textView_heard);
+
+
+        scoreTextView = (TextView) findViewById(R.id.textView_score);
+        difficultyTextView = (TextView) findViewById(R.id.textView_difficulty);
+        percentageTextView = (TextView) findViewById(R.id.textView_percentage);
 
         speakText = (Button) findViewById(R.id.button_play);
         recordText = (Button) findViewById(R.id.button_record);
@@ -165,7 +178,11 @@ public class MainActivity extends AppCompatActivity {
         nextWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                loadNextWord();
+
+
+                //loadNextWord();
+
+                loadRandomWord();
             }
         });
     }
@@ -178,10 +195,50 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    private void loadRandomWord() {
+
+        //QueryBuilder qb = wordDao.queryBuilder();
+        //qb.where().raw("id >= (ABS(RANDOM()) % MAX(id) +1");
+
+
+
+        try {
+
+            QueryBuilder queryBuilder = wordDao.queryBuilder();
+
+            Where where = queryBuilder.where();
+
+            where.isNotNull("wordIPA");
+
+           queryBuilder.orderByRaw("RANDOM()");
+
+            currentWord = (Word) queryBuilder.queryForFirst();
+
+            //currentWord = wordDao.queryBuilder().orderByRaw("RANDOM()").queryForFirst();
+
+
+            //currentWord = (Word) qb.queryForFirst();
+            translateText();
+            updateUI();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+
+
+    }
+
     private void updateUI() {
 
+        difficultyTextView.setText("-");
+        scoreTextView.setText("-");
+        percentageTextView.setText("-");
+
+        //heardTextView
+
         editTextWordEntry.setText(currentWord.getWordText());
-        ipaTextView.setText(currentWord.getWordIPA());
+        ipaTextView.setText("/"+currentWord.getWordIPA()+"/");
 
     }
 
@@ -235,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
 
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
-                        currentWord.setWordTranslation(parseCallbackResponse(jsonData));
+                        currentWord.setWordTranslation("translation: "+parseCallbackResponse(jsonData));
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -298,9 +355,97 @@ public class MainActivity extends AppCompatActivity {
             case REQ_CODE_SPEECH_INPUT: {
                 if (resultCode == RESULT_OK && null != data) {
 
+
                     ArrayList<String> result = data
                             .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                    Toast.makeText(getApplicationContext(), result.get(0), Toast.LENGTH_SHORT).show();
+
+                    Log.v(TAG, "Recognised Speech: \n"+result.toString());
+
+                    heardTextView.setText("Recognised Speech: "+result.toString());
+
+                    //Toast.makeText(getApplicationContext(), result.get(0), Toast.LENGTH_SHORT).show();
+
+                    int difficulty =0 ;
+
+                    if(currentWord.getWordIPA()!=null) {
+                        difficulty = WordScorer.getDifficultyScore(currentWord.getWordIPA());
+                    }else{
+                        return;
+                    }
+
+                    //
+                    // TODO: Convert each word returned into IPA!
+
+
+                    Where<Word, Long> spokenResultsFound;
+                    ArrayList<String> ipaResults = new ArrayList<>();
+
+                    Iterator spokenIterator;
+
+                    for(int i = 0; i<result.size();i++) {
+                        String searchResult = result.get(i);
+
+                        try {
+                            spokenResultsFound = wordDao.queryBuilder().where().eq("wordText", searchResult);
+
+
+                            Word foundWord = spokenResultsFound.queryForFirst();
+                            if(foundWord!=null) {
+
+
+                                /*No need to get next, first only is fine
+                                spokenIterator = spokenResultsFound.iterator();
+
+
+
+                                if (spokenIterator.hasNext()) {
+                                    Word spokenWordInDb = (Word) spokenIterator.next();
+
+                                */
+
+                                //Make sure that found word has an IPA value
+
+                                if (foundWord.getWordIPA() != null) {
+
+                                    ipaResults.add(foundWord.getWordIPA());
+                                }
+                            }
+
+
+                        } catch (SQLException e) {
+                            e.printStackTrace();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+
+                        }
+                    }
+
+                    Log.v(TAG, "IPA results: \n" +ipaResults.toString());
+
+
+                    String concatenatedResults = concatenateArrayOfStrings(ipaResults);
+
+
+                    List<Character> missedChars = WordScorer
+                            .reportMissingPhonemes(currentWord.getWordIPA(), concatenatedResults);
+
+                    String missedCharsString = WordScorer.characterListToString(missedChars);
+
+                    Log.v(TAG, "Missed chars: \n" + missedCharsString);
+
+
+                    int missedPoints = WordScorer.getDifficultyScore(missedCharsString);
+
+                    int score = difficulty-missedPoints;
+                    int percentage = (score/difficulty) *100;
+
+                    currentWord.score(score);
+
+
+                    difficultyTextView.setText("difficulty: "+difficulty);
+                    scoreTextView.setText("score: " + score);
+                    percentageTextView.setText(percentage+" %");
+
                 }
                 break;
             }
@@ -315,6 +460,18 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    private String concatenateArrayOfStrings(ArrayList<String> arrayOfStrings) {
+
+        String concatenatedString ="";
+
+        for(String str: arrayOfStrings){
+
+            concatenatedString += str;
+        }
+
+        return concatenatedString;
     }
 
 

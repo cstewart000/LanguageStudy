@@ -7,4 +7,6 @@
     <string name="record_button_label">record</string>
     <string name="translation_default">word translated</string>
     <string name="next_button_label">next</string>
+    <string name="percentage">percentage</string>
+    <string name="heard_default">heard words:</string>
 </resources>
