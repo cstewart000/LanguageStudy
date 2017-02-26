@@ -51,6 +51,16 @@
             android:layout_alignParentEnd="true"
             android:id="@+id/textView_heard" />
 
+
+        <TextView
+            android:text="@string/heard_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:id="@+id/textView_missedPhonemes" />
+
+
         <TextView
         android:text="@string/score_label_default"
         android:layout_width="wrap_content"

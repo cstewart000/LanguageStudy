@@ -63,6 +63,9 @@ public class MainActivity extends AppCompatActivity {
     private EditText editTextWordEntry;
     private TextView ipaTextView;
     private TextView heardTextView;
+    private TextView missedPhonemeTextView;
+
+
 
     private TextView scoreTextView;
     private TextView difficultyTextView;
@@ -101,6 +104,7 @@ public class MainActivity extends AppCompatActivity {
         editTextWordEntry = (EditText) findViewById(R.id.editText_word);
         ipaTextView = (TextView) findViewById(R.id.textView_ipa);
         heardTextView = (TextView) findViewById(R.id.textView_heard);
+        missedPhonemeTextView = (TextView) findViewById(R.id.textView_missedPhonemes);
 
 
         scoreTextView = (TextView) findViewById(R.id.textView_score);
@@ -183,6 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 //loadNextWord();
 
                 loadRandomWord();
+
             }
         });
     }
@@ -230,6 +235,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void updateUI() {
+
+        heardTextView.setText("-");
+        missedPhonemeTextView.setText("-");
+
 
         difficultyTextView.setText("-");
         scoreTextView.setText("-");
@@ -429,15 +438,20 @@ public class MainActivity extends AppCompatActivity {
                     List<Character> missedChars = WordScorer
                             .reportMissingPhonemes(currentWord.getWordIPA(), concatenatedResults);
 
+
                     String missedCharsString = WordScorer.characterListToString(missedChars);
 
                     Log.v(TAG, "Missed chars: \n" + missedCharsString);
 
 
+                    missedPhonemeTextView.setText("missed phonemes: "+missedCharsString);
+
                     int missedPoints = WordScorer.getDifficultyScore(missedCharsString);
 
                     int score = difficulty-missedPoints;
-                    int percentage = (score/difficulty) *100;
+                    double percentage = ((double)score/(double)difficulty) *100;
+
+                    Log.v(TAG, percentage+"");
 
                     currentWord.score(score);
 
