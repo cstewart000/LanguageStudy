@@ -120,10 +120,10 @@ public class MainActivity extends AppCompatActivity {
         checkTTSandInit();
 
         // Initialise client for translation calls.
-        okHttpGoogleTranslateClient = new OkHttpClient();
+        //okHttpGoogleTranslateClient = new OkHttpClient();
 
 
-        ApplicationSettings.setFirstRun(false);
+        //ApplicationSettings.setFirstRun(false);
         // Code is only required to setup database in the first time
         if(ApplicationSettings.isFirstRun()){
 
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
                                 // the user is done typing.
                                 Log.d(TAG, "Completed editing edit text");
-                                translateText();
+                                //translateText();
 
                                 return true; // consume.
                         }
@@ -195,7 +195,7 @@ public class MainActivity extends AppCompatActivity {
     private void loadNextWord() {
 
         currentWord = (Word) iterator.next();
-        translateText();
+        //translateText();
         updateUI();
 
     }
@@ -224,7 +224,7 @@ public class MainActivity extends AppCompatActivity {
 
 
             //currentWord = (Word) qb.queryForFirst();
-            translateText();
+            //translateText();
             updateUI();
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
+    <!--
     <string name="app_name">Amigo de Pronunciation</string>
     <string name="word_label_default">palabras</string>
     <string name="score_label_default">puntaje</string>
@@ -7,6 +9,17 @@
     <string name="play_button_label">toca</string>
     <string name="record_button_label">grabar</string>
 
+    -->
+    <string name="app_name">Parrot - Ayudante de Pronunciation - Francais Alpha </string>
 
+    <string name="word_label_default">palabra</string>
+    <string name="score_label_default">puntos</string>
+    <string name="difficulty_label_default">dificuldad</string>
+    <string name="play_button_label">toca</string>
+    <string name="record_button_label">grabar</string>
+    <string name="translation_default">traduccion</string>
+    <string name="next_button_label">proximo</string>
+    <string name="percentage">percentaje</string>
+    <string name="heard_default">palabras reconocidos:</string>
 
 </resources>
