@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="hackingismakingisengineering.com.languagepronunciationstudy.animation.WrongRightWordAnimationActivity"
+    android:orientation="vertical">
+
+
+
+
+    <ImageView
+        android:id="@+id/animation_right_wrong_imageview"
+        android:textSize="48dp"
+        android:src="@drawable/main_wireframe_mock"
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:text="example" />
+
+
+
+
+
+
+
+
+
+
+
+</RelativeLayout>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <hackingismakingisengineering.com.languagepronunciationstudy.animation.NonSwipableViewPager
+        android:id="@+id/viewPager"
+        android:layout_width="match_parent"
+        android:layout_height="408dp"
+
+        android:layout_weight="0.90" />
+
+    <Button
+        android:id="@+id/animation_sorting_right_button"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:text="right" />
+
+    <Button
+        android:id="@+id/animation_sorting_wrong_button"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/animation_sorting_right_button"
+        android:layout_alignParentStart="true"
+        android:text="wrong" />
+
+
+</LinearLayout>

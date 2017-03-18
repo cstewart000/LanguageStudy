@@ -1,14 +1,15 @@
 <resources>
 
-    <string name="app_name">Parrot - Language Pronunciation Study - French Alpha </string>
+    <string name="app_name">Parrot - French Alpha </string>
 
     <string name="word_label_default">word</string>
     <string name="score_label_default">score</string>
     <string name="difficulty_label_default">difficulty</string>
-    <string name="play_button_label">play</string>
-    <string name="record_button_label">record</string>
+    <string name="play_button_label">hint</string>
+    <string name="record_button_label">try</string>
+    <string name="favourite_button_label">*</string>
     <string name="translation_default">word translated</string>
-    <string name="next_button_label">next</string>
+    <string name="next_button_label">>></string>
     <string name="percentage">percentage</string>
     <string name="heard_default">heard words:</string>
 

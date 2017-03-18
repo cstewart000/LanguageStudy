@@ -2,28 +2,27 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="hackingismakingisengineering.com.languagepronunciationstudy">
 
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-
-
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
-        android:label="gi@string/app_name"
+        android:icon="@drawable/android_icon_512_squared"
+        android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-
-
-            android:screenOrientation="portrait">
-
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity android:name=".animation.WrongRightWordAnimationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".animation.RightWrongSorting">
+
+
         </activity>
     </application>
 

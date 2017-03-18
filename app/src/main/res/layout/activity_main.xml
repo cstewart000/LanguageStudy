@@ -11,115 +11,150 @@
     tools:context="hackingismakingisengineering.com.languagepronunciationstudy.MainActivity">
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:orientation="vertical">
+
+        <ProgressBar
+            android:id="@+id/progressBar2"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="12dp"
+            />
 
         <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="/IPA/"
-        android:id="@+id/textView_ipa" />
+            android:id="@+id/textView_ipa"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textSize="24dp"
+            android:text="/IPA/" />
 
         <EditText
-            android:maxLines="1"
+            android:id="@+id/editText_word"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_gravity="center"
             android:hint="@string/word_label_default"
-            android:textSize="24dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:inputType="textAutoComplete"
             android:imeOptions="actionSearch"
-            android:id="@+id/editText_word" />
+            android:inputType="textAutoComplete"
+            android:maxLines="1"
+            android:background="@drawable/pie"
+            android:textSize="48dp"
+            android:padding="12dp"
+            android:layout_margin="36dp"/>
 
         <TextView
-            android:text="@string/translation_default"
+            android:id="@+id/textView_translation"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:id="@+id/textView_translation" />
-
-
-        <TextView
-            android:text="@string/heard_default"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/textView_heard" />
+            android:text="@string/translation_default" />
 
 
         <TextView
-            android:text="@string/heard_default"
+            android:id="@+id/textView_heard"
+            android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
-            android:layout_alignParentEnd="true"
-            android:id="@+id/textView_missedPhonemes" />
+            android:text="@string/heard_default" />
 
 
         <TextView
-        android:text="@string/score_label_default"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentEnd="true"
-        android:id="@+id/textView_score" />
-
-        <TextView
-        android:text="@string/difficulty_label_default"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView_difficulty" />
-
-
-        <TextView
-            android:text="@string/percentage"
+            android:id="@+id/textView_missedPhonemes"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:text="@string/heard_default" />
+
+
+        <TextView
+            android:id="@+id/textView_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:visibility="gone"
+            android:text="@string/score_label_default" />
+
+        <TextView
+            android:id="@+id/textView_difficulty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
 
             android:layout_alignParentStart="true"
-            android:id="@+id/textView_percentage" />
+            android:text="@string/difficulty_label_default" />
 
 
-    <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true">
-
-        <Button
-            android:text="@string/next_button_label"
+        <TextView
+            android:id="@+id/textView_percentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-
+            android:visibility="gone"
             android:layout_alignParentStart="true"
-            android:id="@+id/next_button" />
+            android:text="@string/percentage" />
 
-        <Button
-            android:text="@string/play_button_label"
-            android:layout_width="wrap_content"
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-
+            android:layout_alignParentBottom="true"
             android:layout_alignParentStart="true"
-            android:id="@+id/button_play" />
-
-        <Button
-            android:text="@string/record_button_label"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/button_record"
-            android:layout_alignParentEnd="true" />
+            android:orientation="horizontal"
+            android:padding="12dp">
 
 
+            <!--
+            <Button
+                android:id="@+id/next_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+
+                android:text="@string/next_button_label" />
+            -->
+            <Button
+                android:id="@+id/button_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+
+                android:text="@string/play_button_label" />
+
+            <Button
+                android:id="@+id/button_favourite"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_weight="1"
+                android:text="@string/favourite_button_label" />
+
+            <Button
+                android:id="@+id/button_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/record_button_label" />
 
 
         </LinearLayout>
+
+
     </LinearLayout>
+
+
 </LinearLayout>

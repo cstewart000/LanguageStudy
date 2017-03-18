@@ -113,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
         speakText = (Button) findViewById(R.id.button_play);
         recordText = (Button) findViewById(R.id.button_record);
-        nextWord = (Button) findViewById(R.id.next_button);
+        //nextWord = (Button) findViewById(R.id.next_button);
 
         // Initialise the Text to speech object
         // TODO: Refactor so that the check is independent of the initialisation
