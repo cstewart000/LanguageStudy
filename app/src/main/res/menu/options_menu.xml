@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_option_wrong_shake"
+        app:showAsAction="never"
+        android:orderInCategory="100"
+        android:title="@string/word_animation">
+
+    </item>
+
+    <item
+        android:id="@+id/menu_option_pager"
+        app:showAsAction="never"
+        android:orderInCategory="200"
+
+        android:title="@string/sort_pager">
+
+    </item>
+
+    <item
+        android:id="@+id/menu_explaination"
+        app:showAsAction="never"
+        android:orderInCategory="300"
+        android:title="@string/explaination_sequence">
+
+    </item>
+
+    <item
+        android:id="@+id/menu_next_word"
+        app:showAsAction="never"
+        android:orderInCategory="300"
+        android:title="@string/next_word">
+
+    </item>
+
+    <item
+        android:id="@+id/menu_toggle_locale"
+        app:showAsAction="never"
+        android:orderInCategory="500"
+        android:title="@string/change_locale">
+
+    </item>
+
+    <item
+        android:id="@+id/menu_change_voice"
+        app:showAsAction="never"
+        android:orderInCategory="600"
+        android:title="@string/change_language">
+
+    </item>
+
+
+</menu>

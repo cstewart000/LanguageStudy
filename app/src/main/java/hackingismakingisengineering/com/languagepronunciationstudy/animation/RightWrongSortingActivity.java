@@ -1,6 +1,5 @@
 package hackingismakingisengineering.com.languagepronunciationstudy.animation;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,14 +7,13 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.widget.Button;
-import android.widget.TextView;
 
 import hackingismakingisengineering.com.languagepronunciationstudy.R;
+import hackingismakingisengineering.com.languagepronunciationstudy.transformers.DownTransformer;
+import hackingismakingisengineering.com.languagepronunciationstudy.transformers.UpTransformer;
 
-public class RightWrongSorting extends AppCompatActivity {
+public class RightWrongSortingActivity extends AppCompatActivity {
 
     private Button wrongButton;
     private Button rightButton;

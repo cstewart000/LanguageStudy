@@ -8,10 +8,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,9 +35,12 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
+import hackingismakingisengineering.com.languagepronunciationstudy.animation.RightWrongSortingActivity;
+import hackingismakingisengineering.com.languagepronunciationstudy.animation.WrongRightWordAnimationActivity;
 import hackingismakingisengineering.com.languagepronunciationstudy.api.GoogleTranslateApi;
 import hackingismakingisengineering.com.languagepronunciationstudy.database.DictionaryReader;
 import hackingismakingisengineering.com.languagepronunciationstudy.database.WordsDatabaseHelper;
+import hackingismakingisengineering.com.languagepronunciationstudy.model.Session;
 import hackingismakingisengineering.com.languagepronunciationstudy.model.Word;
 import hackingismakingisengineering.com.languagepronunciationstudy.model.WordScorer;
 import hackingismakingisengineering.com.languagepronunciationstudy.settings.ApplicationSettings;
@@ -56,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     // Applicaiton state
-    private boolean initialised =false;
+    private boolean initialised = false;
 
     // UI components
     private TextView translationTextView;
@@ -66,10 +72,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView missedPhonemeTextView;
 
 
-
     private TextView scoreTextView;
     private TextView difficultyTextView;
     private TextView percentageTextView;
+
+    private ProgressBar progressBar;
 
 
     private Button speakText;
@@ -90,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Current Word model
     private Word currentWord;
+    private Session currentSession;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,7 +109,7 @@ public class MainActivity extends AppCompatActivity {
         ApplicationSettings.initaliseApplicationSettings(getApplicationContext());
 
         // Initialise UI views
-        translationTextView = (TextView)findViewById(R.id.textView_translation);
+        translationTextView = (TextView) findViewById(R.id.textView_translation);
         editTextWordEntry = (EditText) findViewById(R.id.editText_word);
         ipaTextView = (TextView) findViewById(R.id.textView_ipa);
         heardTextView = (TextView) findViewById(R.id.textView_heard);
@@ -115,6 +124,9 @@ public class MainActivity extends AppCompatActivity {
         recordText = (Button) findViewById(R.id.button_record);
         //nextWord = (Button) findViewById(R.id.next_button);
 
+        progressBar = (ProgressBar) findViewById(R.id.progressBar2);
+
+
         // Initialise the Text to speech object
         // TODO: Refactor so that the check is independent of the initialisation
         checkTTSandInit();
@@ -125,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
 
         //ApplicationSettings.setFirstRun(false);
         // Code is only required to setup database in the first time
-        if(ApplicationSettings.isFirstRun()){
+        if (ApplicationSettings.isFirstRun()) {
 
             runDictionaryReader();
             ApplicationSettings.setFirstRun(false);
@@ -154,7 +166,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                promptSpeechInput();;
+                promptSpeechInput();
+                ;
             }
         });
 
@@ -162,23 +175,24 @@ public class MainActivity extends AppCompatActivity {
         editTextWordEntry.setOnEditorActionListener(new EditText.OnEditorActionListener() {
 
             //Log.i(TAG, "edit text actioned");
-                    @Override
-                    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                        if (actionId == EditorInfo.IME_ACTION_SEARCH ||
-                                actionId == EditorInfo.IME_ACTION_DONE ||
-                                event.getAction() == KeyEvent.ACTION_DOWN &&
-                                        event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+                if (actionId == EditorInfo.IME_ACTION_SEARCH ||
+                        actionId == EditorInfo.IME_ACTION_DONE ||
+                        event.getAction() == KeyEvent.ACTION_DOWN &&
+                                event.getKeyCode() == KeyEvent.KEYCODE_ENTER) {
 
-                                // the user is done typing.
-                                Log.d(TAG, "Completed editing edit text");
-                                //translateText();
+                    // the user is done typing.
+                    Log.d(TAG, "Completed editing edit text");
+                    //translateText();
 
-                                return true; // consume.
-                        }
-                        return false; // pass on to other listeners.
-                    }
-                });
+                    return true; // consume.
+                }
+                return false; // pass on to other listeners.
+            }
+        });
 
+        /*
         nextWord.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -190,12 +204,19 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+        */
+
+        // Finally setup for next
+        currentSession = new Session(10);
+        loadRandomWord();
     }
 
     private void loadNextWord() {
 
+        currentSession.incrementProgress();
         currentWord = (Word) iterator.next();
         //translateText();
+        currentSession.addWord(currentWord);
         updateUI();
 
     }
@@ -207,7 +228,6 @@ public class MainActivity extends AppCompatActivity {
         //qb.where().raw("id >= (ABS(RANDOM()) % MAX(id) +1");
 
 
-
         try {
 
             QueryBuilder queryBuilder = wordDao.queryBuilder();
@@ -216,7 +236,7 @@ public class MainActivity extends AppCompatActivity {
 
             where.isNotNull("wordIPA");
 
-           queryBuilder.orderByRaw("RANDOM()");
+            queryBuilder.orderByRaw("RANDOM()");
 
             currentWord = (Word) queryBuilder.queryForFirst();
 
@@ -230,8 +250,9 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
-
-
+        currentSession.incrementProgress();
+        //translateText();
+        currentSession.addWord(currentWord);
     }
 
     private void updateUI() {
@@ -247,12 +268,19 @@ public class MainActivity extends AppCompatActivity {
         //heardTextView
 
         editTextWordEntry.setText(currentWord.getWordText());
-        ipaTextView.setText("/"+currentWord.getWordIPA()+"/");
+        ipaTextView.setText("/" + currentWord.getWordIPA() + "/");
+
+
+        //For SDK>24
+        //progressBar.setProgress(currentSession.getProgress(), true);
+
+        progressBar.setMax(currentSession.getSessionLength());
+        progressBar.setProgress(currentSession.getProgress());
 
     }
 
     //TODO: Refactor so part of the GoogleTranslateApi class.
-    private String parseCallbackResponse(String jsonData){
+    private String parseCallbackResponse(String jsonData) {
 
         JSONObject jsonObject = null;
 
@@ -280,9 +308,8 @@ public class MainActivity extends AppCompatActivity {
         //String untranslatedWord = String.valueOf(editTextWordEntry.getText());
 
 
-
         Request request = new Request.Builder()
-                .url(GoogleTranslateApi.COMPLETE+currentWord.getWordText())
+                .url(GoogleTranslateApi.COMPLETE + currentWord.getWordText())
                 .build();
 
         Call call = okHttpGoogleTranslateClient.newCall(request);
@@ -296,12 +323,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 try {
-                    if(response.isSuccessful()){
+                    if (response.isSuccessful()) {
                         Log.v(TAG, "Response successful");
 
                         String jsonData = response.body().string();
                         Log.v(TAG, jsonData);
-                        currentWord.setWordTranslation("translation: "+parseCallbackResponse(jsonData));
+                        currentWord.setWordTranslation("translation: " + parseCallbackResponse(jsonData));
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
@@ -337,8 +364,8 @@ public class MainActivity extends AppCompatActivity {
 
         Locale locale = Locale.FRENCH;
 
-        for(SupportedLanguages languge: languages){
-            if(ApplicationSettings.getTargetLanguage().equals(languge.getStringLanguage())){
+        for (SupportedLanguages languge : languages) {
+            if (ApplicationSettings.getTargetLanguage().equals(languge.getStringLanguage())) {
                 locale = languge.getLocale();
             }
         }
@@ -351,6 +378,69 @@ public class MainActivity extends AppCompatActivity {
         } catch (ActivityNotFoundException a) {
             Toast.makeText(getApplicationContext(), "Speech not supported", Toast.LENGTH_SHORT).show();
         }
+    }
+
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        //return super.onOptionsItemSelected(item);
+
+
+
+        Intent intent;
+
+        switch (item.getItemId()) {
+
+            case R.id.menu_option_wrong_shake:
+
+                intent = new Intent(this, WrongRightWordAnimationActivity.class);
+                startActivity(intent);
+                break;
+
+
+            case R.id.menu_option_pager:
+
+                intent = new Intent(this, RightWrongSortingActivity.class);
+                startActivity(intent);
+                break;
+
+
+            case R.id.menu_explaination:
+
+                //TODO make expaination activity
+                //intent = new Intent(this, ExplainationActivity.class);
+                //startActivity(intent);
+                break;
+
+
+            case R.id.menu_next_word:
+                loadRandomWord();
+                 break;
+
+
+            case R.id.menu_change_voice:
+                speech.changeVoice();
+                break;
+
+            case R.id.menu_toggle_locale:
+                speech.toggleLocale();
+                break;
+        }
+
+            return true;
+
+
+    }
+
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        //return super.onCreateOptionsMenu(menu);
+
+        getMenuInflater().inflate(R.menu.options_menu, menu);
+
+        return true;
     }
 
     /**

@@ -6,10 +6,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
+import android.speech.tts.Voice;
+import android.util.ArraySet;
+import android.util.Log;
 import android.widget.Toast;
 
+import java.util.ArrayList;
 import java.util.Locale;
+import java.util.Random;
+import java.util.Set;
 
+import hackingismakingisengineering.com.languagepronunciationstudy.MainActivity;
 import hackingismakingisengineering.com.languagepronunciationstudy.R;
 
 import static android.app.Activity.RESULT_OK;
@@ -29,12 +36,18 @@ import static android.app.Activity.RESULT_OK;
 public class Speech implements TextToSpeech.OnInitListener {
 
 
+    private static final String TAG = Speech.class.getSimpleName();
     private TextToSpeech textToSpeech;
 
     private boolean ready = false;
     private boolean allowed = false;
+    private Context context;
+
+    private ArrayList<Voice> availableVoices = new ArrayList<>();
+    private ArrayList<Locale> availableLocales = new ArrayList<>();;
 
     public Speech(Context context){
+        this.context = context;
         textToSpeech = new TextToSpeech(context, this);
     }
 
@@ -46,16 +59,41 @@ public class Speech implements TextToSpeech.OnInitListener {
         return allowed;
     }
 
+
+
     @Override
     public void onInit(int status) {
 
-        if (status == TextToSpeech.SUCCESS) {
+
+        for(Voice voice: textToSpeech.getVoices()){
+
+            //Log.v(TAG, voice.toString());
+            //Log.v(TAG,voice.getFeatures().toString());
+
+            if(!voice.getFeatures().contains("notInstalled")){
+
+                if(!voice.isNetworkConnectionRequired()) {
+                    availableVoices.add(voice);
+                    availableLocales.add(voice.getLocale());
+                }
+            }
+        }
+
+        for(Voice voice: availableVoices) {
+
+            Log.v(TAG, voice.toString());
+            Log.v(TAG, voice.getFeatures().toString());
+        }
+            if (status == TextToSpeech.SUCCESS) {
+            //textToSpeech.setVoice(voice)
             setLanguage(Locale.FRENCH);
             ready = true;
         } else {
 
             ready = false;
         }
+
+
     }
 
     public void speak(String text){
@@ -78,6 +116,33 @@ public class Speech implements TextToSpeech.OnInitListener {
 
     public void setLanguage(Locale locale){
         textToSpeech.setLanguage(locale);
+
+    }
+
+    public void toggleLocale(){
+
+        Random rand = new Random();
+
+        int localeIndex = rand.nextInt(availableLocales.size());
+
+        Locale locale = availableLocales.get(localeIndex);
+        textToSpeech.setLanguage(locale);
+
+        Toast.makeText(this.context, "new locale; " + locale.toString(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    public void changeVoice(){
+
+        Random rand = new Random();
+
+        int voiceIndex = rand.nextInt(availableVoices.size());
+
+        Voice voice = availableVoices.get(voiceIndex);
+        textToSpeech.setVoice(voice);
+
+        Toast.makeText(this.context, "new voice; " + voice.toString(), Toast.LENGTH_SHORT).show();
+
 
     }
 

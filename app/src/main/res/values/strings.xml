@@ -13,4 +13,11 @@
     <string name="percentage">percentage</string>
     <string name="heard_default">heard words:</string>
 
+    <string name="sort_pager">sort pager</string>
+    <string name="word_animation">word animation</string>
+    <string name="explaination_sequence">explaination sequence</string>
+    <string name="next_word">next word</string>
+    <string name="change_locale">change locale</string>
+    <string name="change_language">change voice</string>
+
 </resources>

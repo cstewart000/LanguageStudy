@@ -1,4 +1,4 @@
-package hackingismakingisengineering.com.languagepronunciationstudy.animation;
+package hackingismakingisengineering.com.languagepronunciationstudy.transformers;
 
 /**
  * https://github.com/DroidsOnRoids/PageTransformerDemo/blob/master/app/src/main/java/example/com/pagetransformerdemo/transformers/BasePageTransformer.java

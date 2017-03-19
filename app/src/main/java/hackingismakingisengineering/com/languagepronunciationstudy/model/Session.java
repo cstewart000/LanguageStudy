@@ -1,5 +1,6 @@
 package hackingismakingisengineering.com.languagepronunciationstudy.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,11 +15,12 @@ public class Session {
 
     private int sessionLength;
 
-    private int progress;
+    private int progress=0;
 
 
     public Session(int sessionLength) {
         this.sessionLength = sessionLength;
+        this.words = new ArrayList<>();
     }
 
     public Session(List<Word> words) {
@@ -63,5 +65,16 @@ public class Session {
 
     public void setProgress(int progress) {
         this.progress = progress;
+    }
+
+    public void addWord(Word word){
+
+        this.words.add(word);
+
+    }
+
+    public void incrementProgress() {
+        progress++;
+
     }
 }
