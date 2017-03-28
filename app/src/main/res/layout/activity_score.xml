@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="hackingismakingisengineering.com.languagepronunciationstudy.animation.ScoreActivity">
+
+
+    <lecho.lib.hellocharts.view.PieChartView
+        android:id="@+id/chart"
+        android:layout_width="match_parent"
+        android:layout_height="318dp" >
+    </lecho.lib.hellocharts.view.PieChartView>
+
+    <Button
+        android:id="@+id/score_up_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="score up"
+        android:layout_alignParentBottom="true" />
+
+    <Button
+        android:id="@+id/score_down_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="score down"
+        android:layout_alignParentBottom="true"/>
+
+</LinearLayout>

@@ -36,9 +36,11 @@ import java.util.List;
 import java.util.Locale;
 
 import hackingismakingisengineering.com.languagepronunciationstudy.animation.RightWrongSortingActivity;
+import hackingismakingisengineering.com.languagepronunciationstudy.animation.TalkbackActivity;
 import hackingismakingisengineering.com.languagepronunciationstudy.animation.WrongRightWordAnimationActivity;
 import hackingismakingisengineering.com.languagepronunciationstudy.api.GoogleTranslateApi;
 import hackingismakingisengineering.com.languagepronunciationstudy.database.DictionaryReader;
+import hackingismakingisengineering.com.languagepronunciationstudy.animation.ScoreActivity;
 import hackingismakingisengineering.com.languagepronunciationstudy.database.WordsDatabaseHelper;
 import hackingismakingisengineering.com.languagepronunciationstudy.model.Session;
 import hackingismakingisengineering.com.languagepronunciationstudy.model.Word;
@@ -413,6 +415,13 @@ public class MainActivity extends AppCompatActivity {
                 //startActivity(intent);
                 break;
 
+            case R.id.menu_score:
+
+                //TODO make expaination activity
+                intent = new Intent(this, ScoreActivity.class);
+                startActivity(intent);
+                break;
+
 
             case R.id.menu_next_word:
                 loadRandomWord();
@@ -426,6 +435,10 @@ public class MainActivity extends AppCompatActivity {
             case R.id.menu_toggle_locale:
                 speech.toggleLocale();
                 break;
+
+            case R.id.menu_random_insults:
+                intent = new Intent(this, TalkbackActivity.class);
+                startActivity(intent);
         }
 
             return true;

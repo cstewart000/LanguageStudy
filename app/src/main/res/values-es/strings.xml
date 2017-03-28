@@ -21,5 +21,45 @@
     <string name="next_button_label">proximo</string>
     <string name="percentage">percentaje</string>
     <string name="heard_default">palabras reconocidos:</string>
+    <string name="favourite_button_label">*</string>
+
+    <string name="sort_pager">sort pager</string>
+    <string name="word_animation">word animation</string>
+    <string name="explaination_sequence">explaination sequence</string>
+    <string name="next_word">next word</string>
+    <string name="change_locale">change locale</string>
+    <string name="change_language">change voice</string>
+    <string name="score_animation">score animation</string>
+    <string name="random_insult">random insult</string>
+
+    <string-array name="chat_array_english">
+    <item>You should stick to being an Accountant</item>
+    <item>Well done, You have the french level of an 8 year old. Only 26 more years to go!</item>
+    <item>Not bad for a blonde.</item>
+    <item>Didn\'t they teach you how to read properly at school?</item>
+    <item>I used to know a guy from Melbourne. They looked a lot like you, except attractive.</item>
+    <item>do you kiss your mother with that beak!?</item>
+    <item>You\'re trying too hard. Loosen up your beak a little more</item>
+    <item>Well done! two toes up!</item>
+    <item>Solene want a cracker?</item>
+    <item>Ther-r-r-re she blows!</item>
+    <item>Who\'s a pretty Solene?</item>
+    <item>Did you know, I taught my old student, Ginger Beard the Dreadful, to speak 17 languages fluently. He was a great student. Too bad about the disemboweling.</item>
+    <item>Warning! This next segment contains: Strong language, nudity and French.</item>
+    <item>How does every French joke start?… By looking over your shoulder</item>
+    <item>What do you call a runaway Parrot?… A polly-gone!</item>
+    <item>What\'s smarter than a talking parrot?… A spelling bee</item>
+
+    </string-array>
+
+
+    <string-array name="chat_array_french">
+        <item>Tu as beux yeux, tu sais?</item>
+        <item>Quelles sont les deux plus vieilles lettres de l\'alphabet?… C\'est clair: A… et… G</item>
+        <item>un chasseur sachant chasser sans son chien est un vrai chasseur</item>
+        <item>Je suis ce que je suis et si je suis ce que je suis, qu\'est-ce que je suis?</item>
+
+
+    </string-array>
 
 </resources>

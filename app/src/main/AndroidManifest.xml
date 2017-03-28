@@ -10,25 +10,21 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
+        <activity
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
-        <activity android:name=".animation.WrongRightWordAnimationActivity"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity android:name=".animation.RightWrongSortingActivity">
-
-
-        </activity>
+        <activity
+            android:name=".animation.WrongRightWordAnimationActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".animation.RightWrongSortingActivity" />
+        <activity android:name=".animation.ScoreActivity" />
+        <activity android:name=".animation.TalkbackActivity"></activity>
     </application>
 
 </manifest>
